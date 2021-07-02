@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quiz_app/quizpage.dart';
 
 class homescreen extends StatefulWidget {
@@ -87,6 +88,9 @@ class _homescreenState extends State<homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown, DeviceOrientation.portraitUp
+    ]);
     return Scaffold(
       appBar: AppBar(
         title: Text(
