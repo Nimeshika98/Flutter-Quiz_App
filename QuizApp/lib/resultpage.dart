@@ -13,24 +13,24 @@ class resultpage extends StatefulWidget {
 
 class _resultpageState extends State<resultpage> {
   List<String> images = [
-    "images/win.png",
+    "images/win.jpg",
     "images/goodjob.png",
-    "images/bad.jpg",
+    "images/bad.png",
   ];
 
-  String message;
-  String image;
+  late String message;
+  late String image;
 
   @override
   void initState() {
     if (marks < 20) {
-      image = image[2];
+      image = images[2];
       message = "You should Try Hard...\n" + "You scored $marks marks";
     } else if (marks < 35) {
-      image = image[1];
+      image = images[1];
       message = "You Can Do Better...\n" + "You scored $marks marks";
     } else {
-      image = image[0];
+      image = images[0];
       message = "You Did Very Best...\n" + "You scored $marks marks";
     }
     super.initState();

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quiz_app/resultpage.dart';
@@ -9,10 +9,31 @@ import 'package:flutter_quiz_app/resultpage.dart';
 class getjson extends StatelessWidget {
   //const getjson({ Key? key }) : super(key: key);
 
+  String langname;
+  getjson(this.langname);
+  late String assettoload;
+
+  // a function
+  // sets the asset to a particular JSON file
+  // and opens the JSON
+  setasset() {
+    if (langname == "Python") {
+      assettoload = "assets/python.json";
+    } else if (langname == "Java") {
+      assettoload = "assets/java.json";
+    } else if (langname == "C++") {
+      assettoload = "assets/cpp.json";
+    } else {
+      assettoload = "assets/js.json";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    setasset();
     return FutureBuilder(
-      future: DefaultAssetBundle.of(context).loadString("assets/python.json"),
+      future:
+          DefaultAssetBundle.of(context).loadString(assettoload, cache: false),
       builder: (context, snapshot) {
         var mydata = json.decode(snapshot.data.toString());
         if (mydata == null) {
@@ -33,17 +54,17 @@ class getjson extends StatelessWidget {
 
 // ignore: must_be_immutable
 class quizpage extends StatefulWidget {
-  var mydata;
+  final List mydata;
   // const quizpage({Key? key, @required this.mydata}) : super(key: key);
 
-  quizpage({Key? key, @required this.mydata}) : super(key: key);
+  quizpage({Key? key, required this.mydata}) : super(key: key);
 
   @override
   _quizpageState createState() => _quizpageState(mydata);
 }
 
 class _quizpageState extends State<quizpage> {
-  var mydata;
+  final List mydata;
   _quizpageState(this.mydata);
 
   Color colortoshow = Colors.pinkAccent;
@@ -51,8 +72,12 @@ class _quizpageState extends State<quizpage> {
   Color wrong = Colors.red;
   int marks = 0;
   int i = 1;
+  bool disableAnswer = false;
+  // extra varibale to iterate
+  //int j = 1;
   int timer = 30;
   String showtimer = "30";
+  //var random_array;
 
   Map<String, Color> btncolor = {
     "a": Colors.pinkAccent,
@@ -63,10 +88,32 @@ class _quizpageState extends State<quizpage> {
 
   bool canceltimer = false;
 
+  /*genrandomarray() {
+    var distinctIds = [];
+    var rand = new Random();
+    for (int i = 0;;) {
+      distinctIds.add(rand.nextInt(10));
+      random_array = distinctIds.toSet().toList();
+      if (random_array.length < 10) {
+        continue;
+      } else {
+        break;
+      }
+    }
+    print(random_array);
+  }*/
+
   @override
   void initState() {
     starttimer();
     super.initState();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   void starttimer() async {
@@ -90,7 +137,7 @@ class _quizpageState extends State<quizpage> {
     canceltimer = false;
     timer = 30;
     setState(() {
-      if (i < 5) {
+      if (i < 10) {
         i++;
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -101,12 +148,13 @@ class _quizpageState extends State<quizpage> {
       btncolor["b"] = Colors.pinkAccent;
       btncolor["c"] = Colors.pinkAccent;
       btncolor["d"] = Colors.pinkAccent;
+      disableAnswer = false;
     });
     starttimer();
   }
 
   void checkanswer(String k) {
-    if (mydata[2]["1"] == mydata[1]["1"][k]) {
+    if (mydata[2][i.toString()] == mydata[1][i.toString()][k]) {
       marks = marks + 5;
       colortoshow = right;
     } else {
@@ -115,6 +163,7 @@ class _quizpageState extends State<quizpage> {
     setState(() {
       btncolor[k] = colortoshow;
       canceltimer = true;
+      disableAnswer = true;
     });
 
     Timer(Duration(seconds: 2), nextquestion);

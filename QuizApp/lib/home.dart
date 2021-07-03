@@ -17,7 +17,15 @@ class _homescreenState extends State<homescreen> {
     //"images/linux.png",
   ];
 
-  Widget customcard(String langname, String image) {
+  List<String> des = [
+    "Python is one of the most popular and fastest programming language since half a decade.\nIf You think you have learnt it.. \nJust test yourself !!",
+    "Java has always been one of the best choices for Enterprise World. If you think you have learn the Language...\nJust Test Yourself !!",
+    "Javascript is one of the most Popular programming language supporting the Web.\nIt has a wide range of Libraries making it Very Powerful !",
+    "C++, being a statically typed programming language is very powerful and Fast.\nit's DMA feature makes it more useful. !",
+    //"Linux is a OPEN SOURCE Operating System which powers many Servers and Workstation.\nIt is also a top Priority in Developement Work !",
+  ];
+
+  Widget customcard(String langname, String image, String des) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 20.0,
@@ -26,7 +34,7 @@ class _homescreenState extends State<homescreen> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => getjson(),
+            builder: (context) => getjson(langname),
           ));
         },
         child: Material(
@@ -68,7 +76,7 @@ class _homescreenState extends State<homescreen> {
                 Container(
                   padding: EdgeInsets.all(20.0),
                   child: Text(
-                    "Let's Check Your basic Python knowledge",
+                    des,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -88,9 +96,8 @@ class _homescreenState extends State<homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown, DeviceOrientation.portraitUp
-    ]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -103,10 +110,10 @@ class _homescreenState extends State<homescreen> {
       ),
       body: ListView(
         children: <Widget>[
-          customcard("Python", images[0]),
-          customcard("Java", images[1]),
-          customcard("C++", images[2]),
-          customcard("Javascript", images[3]),
+          customcard("Python", images[0], des[0]),
+          customcard("Java", images[1], des[1]),
+          customcard("C++", images[2], des[2]),
+          customcard("Javascript", images[3], des[3]),
         ],
       ),
     );
